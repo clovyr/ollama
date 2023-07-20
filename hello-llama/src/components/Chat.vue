@@ -62,18 +62,31 @@ async function submit(line: String) {
       body: JSON.stringify({
         model: "llama2",
         prompt: line,
-        context: [],
+        context: context.value,
       }),
     }).then(async (res) => {
-      const data: GenRes = await res.json();
+      const data = await res.text()
       console.log(data);
-      messages.value.push({
-        text: data.response,
-        from: "otto",
-        timestamp: new Date(),
-      });
-      scrollBottom();
-      context.value = data.context; // save it
+      if (data) {
+        // split multiple messages
+        let result = "";
+        const split = data.split("\n");
+        split.forEach((d) => {
+          const msg: GenRes = JSON.parse(d);
+          if (msg && msg.response) {
+            result += msg.response;
+          }
+          if (msg && msg.done) {
+            context.value = msg.context; // save it
+          }
+        });
+        messages.value.push({
+          text: result,
+          from: "otto",
+          timestamp: new Date(),
+        });
+        scrollBottom();
+      }
       working.value = false;
     }).catch((err) => {
       console.log(err);
