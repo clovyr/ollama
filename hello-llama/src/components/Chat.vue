@@ -7,9 +7,42 @@ interface msg {
   timestamp: Date;
 }
 
+interface GenReq {
+  model: String;
+  prompt: String;
+  context: Number[];
+  // Options `json:"options"`
+}
+
+interface GenRes {
+  model: String;
+  created_at: String;
+  response: String;
+
+  done: Boolean;
+  context: Number[];
+
+  total_duration: String;
+  prompt_eval_count: Number;
+  prompt_eval_duration: String;
+  eval_count: Number;
+  eval_duration: String;
+}
+
+const context = ref<Number[]>([]);
 const working = ref(false);
 const prompt = ref("");
 const messages = ref<msg[]>([]);
+
+async function scrollBottom() {
+  // scroll to bottom of list after delay
+  setTimeout(() => {
+    const messagesDiv = document.querySelector(".v-sheet");
+    if (messagesDiv) {
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  }, 100);
+}
 
 async function submit(line: String) {
   if (!(line && line.trim().length > 0)) {
@@ -22,19 +55,38 @@ async function submit(line: String) {
     from: "clovyr",
     timestamp: new Date(),
   });
-  messages.value.push({
-    text: "reply",
-    from: "otto",
-    timestamp: new Date(),
-  });
+  scrollBottom();
 
-  // scroll to bottom of list after delay
-  setTimeout(() => {
-    const messagesDiv = document.querySelector(".v-sheet");
-    if (messagesDiv) {
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-  }, 100);
+  fetch("/api/generate",
+    { method: "POST",
+      body: JSON.stringify({
+        model: "llama2",
+        prompt: line,
+        context: [],
+      }),
+    }).then(async (res) => {
+      const data: GenRes = await res.json();
+      console.log(data);
+      messages.value.push({
+        text: data.response,
+        from: "otto",
+        timestamp: new Date(),
+      });
+      scrollBottom();
+      context.value = data.context; // save it
+      working.value = false;
+    }).catch((err) => {
+      console.log(err);
+      working.value = false;
+    });
+
+  // messages.value.push({
+  //   text: "reply",
+  //   from: "otto",
+  //   timestamp: new Date(),
+  // });
+
+
 }
 
 async function onKeypress(e: KeyboardEvent) {
