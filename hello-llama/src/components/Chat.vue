@@ -48,7 +48,7 @@ async function submit(line: String) {
   if (!(line && line.trim().length > 0)) {
     return;
   }
-  // working.value = true;
+  working.value = true;
   line = line.trim();
   messages.value.push({
     text: line,
