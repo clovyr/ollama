@@ -66,7 +66,7 @@ async function submit(line: String) {
       }),
     }).then(async (res) => {
       const data = await res.text()
-      console.log(data);
+      // console.log(data);
       if (data) {
         // split multiple messages
         let result = "";
@@ -133,20 +133,22 @@ async function onClickSend() {
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-top text-center fill-height">
-      <v-img height="100" src="@/assets/clovyr-logo.svg" />
+      <div class="hero">
+        <v-img height="100" src="@/assets/llama.png" />+
+        <v-img height="50" src="@/assets/clovyr-logo.svg" />
+      </div>
 
       <div class="py-14" />
 
       <v-sheet :elevation="10" rounded class="messages-sheet mx-auto">
         <div class="messages mx-auto">
 
-          <v-list>
+          <v-list :lines="false">
             <v-list-item
               v-for="(msg, i) in messages"
               :key="i"
               :value="msg"
               color="primary"
-              rounded="shaped"
             >
               <template v-slot:prepend>
                 <v-avatar
@@ -171,7 +173,7 @@ async function onClickSend() {
         </v-col>
 
         <v-col cols="auto">
-          <v-btn v-if="!working" class="ma-2" color="primary" icon="mdi-send" @click="onClickSend" />
+          <v-btn v-if="!working" class="ma-2" color="#29bd7b" icon="mdi-send" @click="onClickSend" />
           <v-progress-circular v-else indeterminate color="primary" />
         </v-col>
 
@@ -194,10 +196,15 @@ async function onClickSend() {
 
     .msg-text {
       text-align: left;
+      width: 100%;
+      height: auto;
+      word-wrap: normal;
+      white-space: normal;
     }
   }
 }
 .prompt {
   width: 50vw;
 }
+
 </style>

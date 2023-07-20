@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar flat class="bar">
     <v-app-bar-title>
       <!-- <v-icon icon="mdi-circle-slice-6" />
 
@@ -11,3 +11,9 @@
 <script lang="ts" setup>
   //
 </script>
+
+<style scoped lang="scss">
+.bar {
+  background-color: #221a33 !important;
+}
+</style>
