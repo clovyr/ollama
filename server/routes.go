@@ -203,18 +203,17 @@ func list(c *gin.Context) {
 func Serve(ln net.Listener) error {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Ollama is running")
-	})
+	// add static files
+	r.StaticFile("/", "/opt/ollama/public/index.html")
+	r.StaticFile("/index.html", "/opt/ollama/public/index.html")
+	r.StaticFile("/favicon.ico", "/opt/ollama/public/favicon.ico")
+	r.Static("/assets", "/opt/ollama/public/assets")
 
 	r.POST("/api/pull", pull)
 	r.POST("/api/generate", generate)
 	r.POST("/api/create", create)
 	r.POST("/api/push", push)
 	r.GET("/api/tags", list)
-
-	// add static files
-	r.Static("/", "/opt/ollama/public")
 
 	log.Printf("Listening on %s", ln.Addr())
 	s := &http.Server{
