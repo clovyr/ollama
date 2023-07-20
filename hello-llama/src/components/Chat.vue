@@ -72,12 +72,20 @@ async function submit(line: String) {
         let result = "";
         const split = data.split("\n");
         split.forEach((d) => {
-          const msg: GenRes = JSON.parse(d);
-          if (msg && msg.response) {
-            result += msg.response;
-          }
-          if (msg && msg.done) {
-            context.value = msg.context; // save it
+          try {
+            d = d.replaceAll("\n", '\\n');
+            if (!d.endsWith('}')) {
+              d += '}';
+            }
+            const msg: GenRes = JSON.parse(d);
+            if (msg && msg.response) {
+              result += msg.response;
+            }
+            if (msg && msg.done) {
+              context.value = msg.context; // save it
+            }
+          } catch (e) {
+            console.log("error parsing message: " + e);
           }
         });
         messages.value.push({
