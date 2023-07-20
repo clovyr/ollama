@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 /bin/ollama &
 sleep 3

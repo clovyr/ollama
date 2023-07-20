@@ -11,6 +11,7 @@ RUN pnpm install
 RUN pnpm exec vite build
 
 FROM alpine
+RUN apk add --no-cache ca-certificates bash
 COPY --from=0 /go/src/github.com/jmorganca/ollama/ollama /bin/ollama
 COPY --from=1 /opt/app/dist /opt/ollama/public
 COPY ./entrypoint.sh /entrypoint.sh
