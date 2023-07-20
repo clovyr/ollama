@@ -213,6 +213,9 @@ func Serve(ln net.Listener) error {
 	r.POST("/api/push", push)
 	r.GET("/api/tags", list)
 
+	// add static files
+	r.Static("/", "/opt/ollama/public")
+
 	log.Printf("Listening on %s", ln.Addr())
 	s := &http.Server{
 		Handler: r,
