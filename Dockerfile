@@ -5,6 +5,7 @@ RUN CGO_ENABLED=1 go build -ldflags '-linkmode external -extldflags "-static"' .
 
 FROM alpine
 COPY --from=0 /go/src/github.com/jmorganca/ollama/ollama /bin/ollama
+COPY --from=0 /go/src/github.com/jmorganca/ollama/hello-ollama/dist /opt/ollama/public
 EXPOSE 11434
 ARG USER=ollama
 ARG GROUP=ollama
