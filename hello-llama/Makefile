@@ -1,0 +1,4 @@
+
+
+dev:
+	pnpm run dev
