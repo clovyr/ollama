@@ -142,7 +142,7 @@ onMounted(() => {
     <v-responsive class="align-top text-center fill-height">
       <div class="hero">
         <v-img v-if="clicks < 4" height="100" src="@/assets/llama.png" @click="onClickLlama" />
-        <v-img v-else height="100" src="@/assets/sweetbabyrays.png" />+
+        <a v-else href="https://www.youtube.com/watch?v=WkCecpH2GAo" target="_blank"><v-img height="100" src="@/assets/sweetbabyrays.png" /></a>+
         <v-img height="50" src="@/assets/clovyr-logo.svg" />
       </div>
 
