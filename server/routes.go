@@ -208,6 +208,7 @@ func Serve(ln net.Listener) error {
 	r.StaticFile("/index.html", "/opt/ollama/public/index.html")
 	r.StaticFile("/favicon.ico", "/opt/ollama/public/favicon.ico")
 	r.Static("/assets", "/opt/ollama/public/assets")
+	r.GET("/api/config", handleConfig)
 
 	r.POST("/api/pull", pull)
 	r.POST("/api/generate", generate)
