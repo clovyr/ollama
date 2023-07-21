@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
 import { ref } from 'vue';
 
 interface msg {
@@ -29,6 +30,7 @@ interface GenRes {
   eval_duration: String;
 }
 
+const model = ref("llama2");
 const clicks = ref(0);
 const context = ref<Number[]>([]);
 const working = ref(false);
@@ -61,7 +63,7 @@ async function submit(line: String) {
   fetch("/api/generate",
     { method: "POST",
       body: JSON.stringify({
-        model: "llama2",
+        model: model.value,
         prompt: line,
         context: context.value,
       }),
@@ -125,6 +127,14 @@ async function onClickSend() {
 async function onClickLlama() {
   clicks.value += 1;
 }
+
+onMounted(() => {
+  fetch("/api/config").then((res) => {
+    res.json().then((data) => {
+      model.value = data.model;
+    });
+  });
+});
 </script>
 
 <template>
