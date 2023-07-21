@@ -29,6 +29,7 @@ interface GenRes {
   eval_duration: String;
 }
 
+const clicks = ref(0);
 const context = ref<Number[]>([]);
 const working = ref(false);
 const prompt = ref("");
@@ -100,14 +101,6 @@ async function submit(line: String) {
       console.log(err);
       working.value = false;
     });
-
-  // messages.value.push({
-  //   text: "reply",
-  //   from: "otto",
-  //   timestamp: new Date(),
-  // });
-
-
 }
 
 async function onKeypress(e: KeyboardEvent) {
@@ -128,13 +121,18 @@ async function onClickSend() {
   submit(prompt.value);
   prompt.value = "";
 }
+
+async function onClickLlama() {
+  clicks.value += 1;
+}
 </script>
 
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-top text-center fill-height">
       <div class="hero">
-        <v-img height="100" src="@/assets/llama.png" />+
+        <v-img v-if="clicks < 4" height="100" src="@/assets/llama.png" @click="onClickLlama" />
+        <v-img v-else height="100" src="@/assets/sweetbabyrays.png" />+
         <v-img height="50" src="@/assets/clovyr-logo.svg" />
       </div>
 
